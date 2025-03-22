@@ -1,6 +1,7 @@
 # SimpleLog
 Battlemod created by Byrth  
-Ported to Ashita by Spiken  
+Ported to Ashita by Spiken 
+Improvements by Commandobill 
 Combat and Message log parser for Ashita v4  
 
 # Features
