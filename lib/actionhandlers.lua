@@ -941,10 +941,8 @@ end
 
 actionhandlers.SpellParse = function (act)
     local spell, abil_ID, effect_val = {}
-    -- If the target returns nil, will return No MSG instad of crashing.
-    -- This is a bandaid
-    if(act.targets[1] == nil) then
-        return false;
+    if not act.targets[1] then -- Checking to see if there's a nil value
+        return none
     end
     local msg_ID = act.targets[1].actions[1].message
 
