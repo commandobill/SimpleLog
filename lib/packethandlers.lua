@@ -10,7 +10,7 @@ local packethandlers = {};
 -- trying to identify possible dupes
 local last_chunk_buffer;
 local reference_buffer = T{};
-function record_packets(e)
+function check_duplicates(e)
     if ffi.C.memcmp(e.data_raw, e.chunk_data_raw, e.size) == 0 then
         if #reference_buffer > 2 then
             reference_buffer[#reference_buffer] = nil
@@ -30,9 +30,7 @@ function record_packets(e)
             offset = offset + size;
         end
     end
-end
 
-function check_duplicates(e)
     local packet = struct.unpack('c' .. e.size, e.data, 1)
     for _, chunk in ipairs(reference_buffer) do
         for _, bufferEntry in ipairs(chunk) do
@@ -90,7 +88,6 @@ packethandlers.HandleIncoming0x28 = function(e)
 end
 
 packethandlers.HandleIncomingPacket = function(e)
-	record_packets(e);
 	if (e.id == 0x00A) then
 		gPacketHandlers.HandleIncoming0x00A(e);
     elseif (e.id == 0x28) then
@@ -161,7 +158,7 @@ packethandlers.HandleIncomingPacket = function(e)
         -- Filter these messages
         if not gFuncs.CheckFilter(actor, target, 0, am.message_id) then e.blocked = true end
 
-        if not actor or not target then -- If the actor or target table is nil, ignore the packet
+        if not actor or not target or e.blocked then -- If the actor or target table is nil or the packet should be blocked, ignore the packet
         elseif am.message_id == 800 then -- Spirit bond message
             local status = gFuncs.ColorIt(AshitaCore:GetResourceManager():GetString('buffs.names', am.param_1, gProfileSettings.lang.internal), gProfileColor.statuscol)
             local targ = gFuncs.ColorIt(target.name or '', gProfileColor[target.owner or target.type])
