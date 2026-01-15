@@ -24,7 +24,7 @@ actionhandlers.parse_action_packet = function(act)
     targets_condensed = false
 
     if not act.action then
-        print(chat.header('SimpleLogDebug') .. chat.message('No Action MSG'))
+        -- print(chat.header('SimpleLogDebug') .. chat.message('No Action MSG'))
         return act
     end
 
